@@ -27,6 +27,7 @@ func runConfigTests() async {
         expectEqual(config.releaseStatuses, ["Ready to release"])
         expectEqual(config.releaseRepository, "")
         expectEqual(config.releasePrompt, "")
+        expectEqual(config.reportPrompt, "")
         expectEqual(config.botAccounts, [])
         expectEqual(config.ignoredAccounts, ["github-actions"])
     }
@@ -69,6 +70,7 @@ func runConfigTests() async {
             config.releaseStatuses = ["Ready for prod"]
             config.releaseRepository = "acme/site"
             config.releasePrompt = "Check prod"
+            config.reportPrompt = "/daily-report"
             config.botAccounts = ["robot"]
             config.ignoredAccounts = []
             config.reposDirectory = "/tmp/repos"

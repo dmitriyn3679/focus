@@ -15,6 +15,7 @@ struct SettingsView: View {
     @State private var reposDirectory: String
     @State private var releaseRepository: String
     @State private var releasePrompt: String
+    @State private var reportPrompt: String
     @State private var botAccounts: String
     @State private var ignoredAccounts: String
 
@@ -35,6 +36,7 @@ struct SettingsView: View {
         _reposDirectory = State(initialValue: config.reposDirectory)
         _releaseRepository = State(initialValue: config.releaseRepository)
         _releasePrompt = State(initialValue: config.releasePrompt)
+        _reportPrompt = State(initialValue: config.reportPrompt)
         _botAccounts = State(initialValue: config.botAccounts.joined(separator: ", "))
         _ignoredAccounts = State(initialValue: config.ignoredAccounts.joined(separator: ", "))
     }
@@ -145,6 +147,7 @@ struct SettingsView: View {
             promptField("Review requests", text: $reviewPrompt, hint: "Sent above the PR link when you press ✨ on a review request.")
             promptField("My PRs with comments", text: $commentsPrompt, hint: "Sent above the PR link when you press the wrench on your PR with unresolved review threads.")
             promptField("Prod recheck", text: $releasePrompt, hint: "Sent above the keys of your Ready to release issues when you press Prod recheck.")
+            promptField("Report", text: $reportPrompt, hint: "Sent as is when you press Report in the In progress header. The button shows only while this is filled.")
         }
     }
 
@@ -201,6 +204,7 @@ struct SettingsView: View {
         config.reposDirectory = reposDirectory.trimmingCharacters(in: .whitespacesAndNewlines)
         config.releaseRepository = releaseRepository.trimmingCharacters(in: .whitespacesAndNewlines)
         config.releasePrompt = releasePrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        config.reportPrompt = reportPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
         config.botAccounts = Self.list(botAccounts)
         config.ignoredAccounts = Self.list(ignoredAccounts)
         environment.apply(config: config, newToken: token == Self.maskedToken ? nil : token)

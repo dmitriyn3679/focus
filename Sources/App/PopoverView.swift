@@ -83,14 +83,25 @@ struct PopoverView: View {
                     )
                 }
                 SectionView(title: "In progress", state: store.inProgress, accessory: {
-                    if !store.readyToRelease.items.isEmpty {
-                        Button {
-                            environment.prodRecheckInClaude(store.readyToRelease.items)
-                        } label: {
-                            Label("Prod recheck", systemImage: "sparkles")
+                    HStack(spacing: 2) {
+                        if !store.readyToRelease.items.isEmpty {
+                            Button {
+                                environment.prodRecheckInClaude(store.readyToRelease.items)
+                            } label: {
+                                Label("Prod recheck", systemImage: "sparkles")
+                            }
+                            .buttonStyle(TextButtonStyle())
+                            .help(prodRecheckHelp)
                         }
-                        .buttonStyle(TextButtonStyle())
-                        .help(prodRecheckHelp)
+                        if !reportPrompt.isEmpty {
+                            Button {
+                                environment.reportInClaude()
+                            } label: {
+                                Label("Report", systemImage: "doc.text")
+                            }
+                            .buttonStyle(TextButtonStyle())
+                            .help("Open a Claude Code session with: \(reportPrompt)")
+                        }
                     }
                 }) { issue in
                     IssueRow(issue: issue)
@@ -132,6 +143,10 @@ struct PopoverView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
+    }
+
+    private var reportPrompt: String {
+        environment.config.reportPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private var prodRecheckHelp: String {

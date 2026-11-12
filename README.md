@@ -6,6 +6,7 @@ A small macOS menu bar app that shows, in one window, what needs your attention 
 - **Review requests** — open pull requests where you are a requested reviewer. The ✨ button opens a Claude Code session for the PR.
 - **In progress** — Jira issues assigned to you in progress.
 - **Prod recheck** — a button in the **In progress** header, shown while you have Jira issues in Ready to release (the tooltip names them). It opens a Claude Code session with your prod recheck prompt and those issue keys.
+- **Report** — a button next to it, shown once the Report prompt is filled. It opens a Claude Code session with that prompt, for example a daily report command.
 - **Mentions** — Jira comments from the last days that @mention you. Unseen mentions have a dot; opening one marks it seen. The trash button hides a mention and **Clear all** hides the whole list; hidden mentions stay hidden in Focus (nothing changes in Jira), and new comments still appear.
 
 The menu bar icon (a horizontal lightning bolt) shows a number: review requests plus unseen mentions plus your PRs with new comments. Data refreshes every 5 minutes, when the window opens (if the last refresh is older than a minute), after the Mac wakes, and on demand with the refresh button or ⌘R. The window footer shows the installed version.
@@ -33,7 +34,7 @@ Everything starts empty. Open the gear in the Focus window.
 | GitHub → Repositories folder | The folder that holds your local clones. Focus finds the clone of a PR's repository here by its `origin` remote and opens the Claude Code session in it. Leave empty to open sessions without a folder. | `~/Projects` |
 | GitHub → Bot accounts | GitHub logins of bots that review your code, comma-separated. Their comments are counted as 🤖. Accounts GitHub marks as bots are counted as bots anyway. | `review-bot` |
 | GitHub → Ignored accounts | Logins whose comments should not be shown or counted at all, such as CI reports. | `github-actions, sonarqube` |
-| GitHub → Prod recheck repository | The repository (`owner/name`) whose local clone **Prod recheck** opens. | `your-org/web` |
+| GitHub → Prod recheck repository | The repository (`owner/name`) whose local clone **Prod recheck** and **Report** open. | `your-org/web` |
 | Jira → Site | Your Jira Cloud host, without `https://`. Without it the Jira sections stay empty. | `your-company.atlassian.net` |
 | Jira → Email | The email of your Atlassian account. | `you@your-company.com` |
 | Jira → API token | A token from <https://id.atlassian.com/manage-profile/security/api-tokens> (also linked as **Create API token**). | |
@@ -50,12 +51,14 @@ Each button opens a new Claude Code session in Claude Desktop, in your local clo
 | Review requests | ✨ on a review request | the PR link |
 | My PRs with comments | wrench on your PR with unresolved review threads | the PR link |
 | Prod recheck | Prod recheck in the In progress header | the keys of your Ready to release issues, comma-separated |
+| Report | Report in the In progress header (shown only while this field is filled) | nothing: the text is sent as is |
 
 Put one of these in each field:
 
 - **A plain prompt.** Works without any setup. Examples:
   - Review requests: `Review this pull request: read the diff against its base branch and list bugs, risks and missing tests with file:line references. Do not comment on GitHub.`
   - My PRs with comments: `Go through the unresolved review comments on this pull request. For each one, check it against the code and say whether it is valid, then propose a change or a reply. Do not edit files or reply on GitHub until I say so.`
+  - Report: `Make a short report of the Jira issues I worked on today, grouped into Done and In progress, ready to paste into chat.`
   - Prod recheck: `For these Jira issues, find which translations, content blocks and SEO texts (title, description, h1, h2 and so on) they add or change, and check on production that each one is filled in every language. Report what is missing or empty, per issue and language.`
 - **A slash command for your own skill.** A skill keeps a long, tuned instruction out of the field and can be improved over time. Ask Claude Code to create one, for example "create a skill prod-recheck in ~/.claude/skills that checks Jira issues' translations, content blocks and SEO texts on our production site", then put `/prod-recheck` in the field. Skills in `~/.claude/skills/` work in every repository; skills in a repository's `.claude/skills/` work only there. Focus sends the field as is, so the command must exist on your machine.
 

@@ -14,6 +14,7 @@ struct AppConfig: Codable, Equatable {
     var releaseStatuses: [String]
     var releaseRepository: String
     var releasePrompt: String
+    var reportPrompt: String
     var botAccounts: [String]
     var ignoredAccounts: [String]
 
@@ -33,6 +34,7 @@ struct AppConfig: Codable, Equatable {
         releaseStatuses: ["Ready to release"],
         releaseRepository: "",
         releasePrompt: defaultReleasePrompt,
+        reportPrompt: "",
         botAccounts: [],
         ignoredAccounts: ["github-actions"]
     )
@@ -41,7 +43,7 @@ struct AppConfig: Codable, Equatable {
         TimeInterval(max(60, refreshIntervalSeconds))
     }
 
-    init(githubOrg: String, ghPath: String, jiraSite: String, jiraEmail: String, inProgressStatuses: [String], mentionsLookbackDays: Int, refreshIntervalSeconds: Int, reviewPrompt: String, commentsPrompt: String, reposDirectory: String, releaseStatuses: [String], releaseRepository: String, releasePrompt: String, botAccounts: [String], ignoredAccounts: [String]) {
+    init(githubOrg: String, ghPath: String, jiraSite: String, jiraEmail: String, inProgressStatuses: [String], mentionsLookbackDays: Int, refreshIntervalSeconds: Int, reviewPrompt: String, commentsPrompt: String, reposDirectory: String, releaseStatuses: [String], releaseRepository: String, releasePrompt: String, reportPrompt: String, botAccounts: [String], ignoredAccounts: [String]) {
         self.githubOrg = githubOrg
         self.ghPath = ghPath
         self.jiraSite = jiraSite
@@ -55,6 +57,7 @@ struct AppConfig: Codable, Equatable {
         self.releaseStatuses = releaseStatuses
         self.releaseRepository = releaseRepository
         self.releasePrompt = releasePrompt
+        self.reportPrompt = reportPrompt
         self.botAccounts = botAccounts
         self.ignoredAccounts = ignoredAccounts
     }
@@ -75,6 +78,7 @@ struct AppConfig: Codable, Equatable {
         releaseStatuses = try container.decodeIfPresent([String].self, forKey: .releaseStatuses) ?? fallback.releaseStatuses
         releaseRepository = try container.decodeIfPresent(String.self, forKey: .releaseRepository) ?? fallback.releaseRepository
         releasePrompt = try container.decodeIfPresent(String.self, forKey: .releasePrompt) ?? fallback.releasePrompt
+        reportPrompt = try container.decodeIfPresent(String.self, forKey: .reportPrompt) ?? fallback.reportPrompt
         botAccounts = try container.decodeIfPresent([String].self, forKey: .botAccounts) ?? fallback.botAccounts
         ignoredAccounts = try container.decodeIfPresent([String].self, forKey: .ignoredAccounts) ?? fallback.ignoredAccounts
     }

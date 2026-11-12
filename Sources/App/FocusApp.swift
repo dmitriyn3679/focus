@@ -99,6 +99,12 @@ final class AppEnvironment: ObservableObject {
         open(message: ClaudeHandoff.releaseMessage(for: issues, prompt: config.releasePrompt), repository: config.releaseRepository)
     }
 
+    func reportInClaude() {
+        let message = config.reportPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !message.isEmpty else { return }
+        open(message: String(message.prefix(ClaudeHandoff.maxMessageLength)), repository: config.releaseRepository)
+    }
+
     private func openInClaude(_ pr: PullRequest, prompt: String) {
         open(message: ClaudeHandoff.message(for: pr, prompt: prompt), repository: pr.repoFullName)
     }
